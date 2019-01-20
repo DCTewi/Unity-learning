@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
 {
     [Range(0.0f, 10.0f)]
     public float speed = 5.0f;
+    [Range(0.0f, 1.0f)]
+    public float touchSpeed = 0.5f;
     [Range(0.0f, 8.0f)]
     public float tilt = 4.0f;
     public Boundary boundary;
@@ -33,6 +35,15 @@ public class PlayerController : MonoBehaviour
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 
+        if (Input.touchCount > 0)
+        {
+            if (Input.touches[0].phase == TouchPhase.Moved)
+            {
+                moveHorizontal += Input.GetAxis("Mouse X") * touchSpeed;
+                moveVertical += Input.GetAxis("Mouse Y") * touchSpeed;
+            }
+        }
+
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
         rb.velocity = movement * speed;
         rb.position = new Vector3(Mathf.Clamp(rb.position.x, boundary.xMin, boundary.xMax), 0.0f, Mathf.Clamp(rb.position.z, boundary.zMin, boundary.zMax));
@@ -41,7 +52,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButton("Fire1") && fireColding > fireColdDown)
+        if ((Input.GetButton("Fire1") || Input.touchCount > 0) && fireColding > fireColdDown)
         {
             fireColding = 0.0f;
             Instantiate(bolt, shoter.position, shoter.rotation);

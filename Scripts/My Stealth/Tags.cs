@@ -11,4 +11,5 @@ public class Tags : MonoBehaviour
     public static string Fader = "Fader";
     public static string Enemy = "Enemy";
     public static string Siren = "Siren";
+	public static string Door = "Door";
 }

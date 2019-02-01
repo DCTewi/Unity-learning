@@ -17,9 +17,9 @@ public class PlayerMovement : MonoBehaviour
         animator.SetLayerWeight(1, 1f);
     }
 
-    private void Rotating (float h, float v)
+    private void Rotating(float h, float v)
     {
-        Vector3 targetDir = new Vector3(h, 0, v);
+        Vector3 targetDir = new Vector3(h, 0f, v);
         Quaternion targetRot = Quaternion.LookRotation(targetDir, Vector3.up);
         Rigidbody rb = this.GetComponent<Rigidbody>();
         Quaternion newRot = Quaternion.Lerp(rb.rotation, targetRot, turnSmoothing * Time.deltaTime);
@@ -45,6 +45,15 @@ public class PlayerMovement : MonoBehaviour
         AudioSource audioSource = this.GetComponent<AudioSource>();
         if (animator.GetCurrentAnimatorStateInfo(0).fullPathHash == hash.locomotionState)
         {
+            if (!audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
+            else audioSource.Stop();
+        }
+        if (shout)
+        {
+            AudioSource.PlayClipAtPoint(shoutingClip, this.transform.position);
         }
     }
 
@@ -54,5 +63,12 @@ public class PlayerMovement : MonoBehaviour
         float v = Input.GetAxis("Vertical");
         bool sneak = Input.GetButton("Sneak");
         MovementManagement(h, v, sneak);
+    }
+
+    private void Update()
+    {
+        bool shout = Input.GetButtonDown("Attract");
+        animator.SetBool(hash.shoutingBool, shout);
+        AudioManagement(shout);
     }
 }

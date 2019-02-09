@@ -7,4 +7,5 @@
     public static string Background = "Background";
     public static string Foreground = "Foreground";
     public static string Midground = "Midground";
+    public static string Boundary = "Boundary";
 }

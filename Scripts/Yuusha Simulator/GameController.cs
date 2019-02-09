@@ -12,7 +12,7 @@ public class GameController : MonoBehaviour
     {
         Debug.Log("Loading " + scene);
         animFader.SetTrigger("Fade");
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.8f);
 
         GC.Collect();
         Resources.UnloadUnusedAssets();

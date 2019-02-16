@@ -6,15 +6,30 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     public float smooth = 1.5f;
+    public float shake = 0.05f;
 
     private Vector3 offset;
     private Transform player;
     private float leftBoundary;
     private float rightBoundary;
     private float widthCamera;
+    private Camera self;
 
-    private void Awake()
+    public IEnumerator IEnumShake()
     {
+        self.rect = new Rect(new Vector2(Mathf.Lerp(0f, 0.05f, 0.1f), Mathf.Lerp(0f, -0.05f, 0.1f)), new Vector2(1f, 1f));
+        yield return new WaitForSeconds(0.1f);
+        self.rect = new Rect(new Vector2(0f, 0f), new Vector2(1f, 1f));
+    }
+
+    public void Shake()
+    {
+        StartCoroutine(IEnumShake());
+    }
+
+    private void Start()
+    {
+        self = GetComponent<Camera>();
         widthCamera = gameObject.GetComponent<Camera>().orthographicSize / 9f * 16f;
         player = GameObject.FindGameObjectWithTag(Tags.Player).GetComponent<Transform>();
         offset = transform.position - player.position;
